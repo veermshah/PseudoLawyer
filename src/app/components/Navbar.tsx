@@ -13,6 +13,7 @@ export default function Navbar() {
                     whileHover={{ scale: 1.1 }}
                     transition={{ duration: 0.6 }} // Duration in seconds
                     whileTap={{ scale: 0.9 }}
+                    style={{ cursor: "pointer" }}
                     onClick={() => {
                         router.push("/");
                     }}
@@ -25,6 +26,7 @@ export default function Navbar() {
                     whileHover={{ scale: 1.1 }}
                     transition={{ duration: 0.6 }} // Duration in seconds
                     whileTap={{ scale: 0.9 }}
+                    style={{ cursor: "pointer" }}
                     onClick={() => {
                         router.push("/chats");
                     }}
@@ -37,6 +39,7 @@ export default function Navbar() {
                     whileHover={{ scale: 1.1 }}
                     transition={{ duration: 0.6 }} // Duration in seconds
                     whileTap={{ scale: 0.9 }}
+                    style={{ cursor: "pointer" }}
                     onClick={() => {
                         router.push("/contracts");
                     }}
@@ -50,6 +53,7 @@ export default function Navbar() {
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 className="hover:bg-white rounded-3xl pr-2"
+                style={{ cursor: "pointer" }}
                 onClick={() => {
                     router.push("/auth/login");
                 }}
