@@ -5,7 +5,11 @@ import {
     signIn,
     signOut,
     resendSignUpCode,
-    autoSignIn
+    autoSignIn,
+    updateUserAttribute,
+    type UpdateUserAttributeOutput,
+    confirmUserAttribute,
+    updatePassword,
 } from "aws-amplify/auth";
 import { getErrorMessage } from "@/utils/get-error-message";
 
@@ -65,7 +69,7 @@ export async function handleConfirmSignUp(
             username: String(formData.get("email")),
             confirmationCode: String(formData.get("code")),
         });
-        autoSignIn();
+        await autoSignIn();
     } catch (error) {
         return getErrorMessage(error);
     }
@@ -101,5 +105,103 @@ export async function handleSignOut() {
     } catch (error) {
         console.log(getErrorMessage(error));
     }
-    redirect("/api/auth/login");
+    redirect("/");
+}
+
+export async function handleUpdateUserAttribute(
+    prevState: string,
+    formData: FormData
+) {
+    let attributeKey = "name";
+    let attributeValue;
+    let currentAttributeValue;
+
+    if (formData.get("email")) {
+        attributeKey = "email";
+        attributeValue = formData.get("email");
+        currentAttributeValue = formData.get("current_email");
+    } else if (formData.get("birthdate")) {
+        attributeKey = "birthdate";
+        attributeValue = formData.get("birthdate");
+        currentAttributeValue = formData.get("current_birthdate");
+    } else {
+        attributeValue = formData.get("name");
+        currentAttributeValue = formData.get("current_name");
+    }
+
+    if (attributeValue === currentAttributeValue) {
+        return "same";
+    }
+
+    try {
+        const output = await updateUserAttribute({
+            userAttribute: {
+                attributeKey: String(attributeKey),
+                value: String(attributeValue),
+            },
+        });
+        return handleUpdateUserAttributeNextSteps(output);
+    } catch (error) {
+        console.log(error);
+        return "error";
+    }
+}
+
+function handleUpdateUserAttributeNextSteps(output: UpdateUserAttributeOutput) {
+    const { nextStep } = output;
+
+    switch (nextStep.updateAttributeStep) {
+        case "CONFIRM_ATTRIBUTE_WITH_CODE":
+            const codeDeliveryDetails = nextStep.codeDeliveryDetails;
+            return `Confirmation code was sent to ${codeDeliveryDetails?.deliveryMedium}.`;
+        case "DONE":
+            return "success";
+    }
+}
+
+export async function handleUpdatePassword(
+    prevState: "success" | "error" | undefined,
+    formData: FormData
+) {
+    const currentPassword = formData.get("current_password");
+    const newPassword = formData.get("new_password");
+
+    if (currentPassword === newPassword) {
+        return;
+    }
+
+    try {
+        await updatePassword({
+            oldPassword: String(currentPassword),
+            newPassword: String(newPassword),
+        });
+    } catch (error) {
+        console.log(error);
+        return "error";
+    }
+
+    return "success";
+}
+
+export async function handleConfirmUserAttribute(
+    prevState: "success" | "error" | undefined,
+    formData: FormData
+) {
+    const code = formData.get("code");
+
+    if (!code) {
+        return;
+    }
+
+    try {
+        await confirmUserAttribute({
+            userAttributeKey: "email",
+            confirmationCode: String(code),
+        });
+    } catch (error) {
+        console.log(error);
+        return "error";
+    }
+
+    return "success";
 }
