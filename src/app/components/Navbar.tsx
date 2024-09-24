@@ -1,11 +1,15 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { IoLogIn } from "react-icons/io5";
+import useAuthUser from "../hooks/use-auth-user";
+import { MdAccountCircle } from "react-icons/md";
 
 export default function Navbar() {
     const router = useRouter();
+    const user = useAuthUser();
+
     return (
         <div className="flex items-center justify-between text-3xl barlow-extrabold py-5 px-20 bg-primary ">
             <div className="flex gap-8">
@@ -52,13 +56,25 @@ export default function Navbar() {
             <motion.div
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
-                className="hover:bg-white rounded-3xl pr-2"
                 style={{ cursor: "pointer" }}
-                onClick={() => {
-                    router.push("/api/auth/login");
-                }}
             >
-                <IoLogIn size={"4rem"} />
+                {user ? (
+                    <MdAccountCircle
+                        size={"4rem"}
+                        className="hover:bg-white rounded-full"
+                        onClick={() => {
+                            router.push("/api/auth/profile");
+                        }}
+                    />
+                ) : (
+                    <IoLogIn
+                        size={"4rem"}
+                        className="hover:bg-white rounded-3xl pr-2"
+                        onClick={() => {
+                            router.push("/api/auth/login");
+                        }}
+                    />
+                )}
             </motion.div>
         </div>
     );

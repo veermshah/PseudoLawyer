@@ -1,5 +1,5 @@
 "use client";
-
+// for user auth dont touchy
 import { Amplify, type ResourcesConfig } from "aws-amplify";
 
 export const authConfig: ResourcesConfig["Auth"] = {

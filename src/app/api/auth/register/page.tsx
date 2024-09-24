@@ -1,72 +1,143 @@
 "use client";
-import React from "react";
-import { motion } from "framer-motion";
-import { useRouter } from "next/navigation";
-import { FaArrowLeft, FaHome } from "react-icons/fa";
 
-export default function Registration() {
-    const router = useRouter();
+import { Button } from "./button";
+import { useFormState, useFormStatus } from "react-dom";
+import { handleSignUp } from "@/lib/cognitoActions";
+import Link from "next/link";
+import SendVerificationCode from "./send-verification-code-form";
+
+export default function SignUpForm() {
+    const [errorMessage, dispatch] = useFormState(handleSignUp, undefined);
+    return (
+        <form action={dispatch} className="space-y-3">
+            <div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8">
+                <h1 className={` mb-3 text-2xl`}>Please create an account.</h1>
+                <div className="w-full">
+                    <div>
+                        <label
+                            className="mb-3 mt-5 block text-xs font-medium text-gray-900"
+                            htmlFor="name"
+                        >
+                            Name
+                        </label>
+                        <div className="relative">
+                            <input
+                                className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
+                                id="name"
+                                type="text"
+                                name="name"
+                                minLength={4}
+                                placeholder="Enter your name"
+                                required
+                            />
+                        </div>
+                        <label
+                            className="mb-3 mt-5 block text-xs font-medium text-gray-900"
+                            htmlFor="birthdate"
+                        >
+                            birthDate
+                        </label>
+                        <div className="relative">
+                            <input
+                                className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
+                                id="birthdate"
+                                type="date"
+                                name="birthdate"
+                                minLength={4}
+                                placeholder="Enter your birthDate"
+                                required
+                            />
+                        </div>
+                        <label
+                            className="mb-3 mt-5 block text-xs font-medium text-gray-900"
+                            htmlFor="phone_number"
+                        >
+                            Phone Number
+                        </label>
+                        <div className="relative">
+                            <input
+                                className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
+                                id="phone_number"
+                                type="tel"
+                                minLength={4}
+                                placeholder="Enter your phone number"
+                                required
+                            />
+                        </div>
+                    </div>
+                    <div className="mt-4">
+                        <label
+                            className="mb-3 mt-5 block text-xs font-medium text-gray-900"
+                            htmlFor="email"
+                        >
+                            Email
+                        </label>
+                        <div className="relative">
+                            <input
+                                className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
+                                id="email"
+                                type="email"
+                                name="email"
+                                placeholder="Enter your email address"
+                                required
+                            />
+                        </div>
+                    </div>
+                    <div className="mt-4">
+                        <label
+                            className="mb-3 mt-5 block text-xs font-medium text-gray-900"
+                            htmlFor="password"
+                        >
+                            Password
+                        </label>
+                        <div className="relative">
+                            <input
+                                className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
+                                id="password"
+                                type="password"
+                                name="password"
+                                placeholder="Enter password"
+                                required
+                                minLength={6}
+                            />
+                        </div>
+                    </div>
+                </div>
+                <SignUpButton />
+                <div className="flex justify-center">
+                    <Link
+                        href="/auth/login"
+                        className="mt-2 cursor-pointer text-blue-500"
+                    >
+                        Already have an account? Log in.
+                    </Link>
+                </div>
+                <div className="flex h-8 items-end space-x-1">
+                    <div
+                        className="flex h-8 items-end space-x-1"
+                        aria-live="polite"
+                        aria-atomic="true"
+                    >
+                        {errorMessage && (
+                            <>
+                                <p className="text-sm text-red-500">
+                                    {errorMessage}
+                                </p>
+                            </>
+                        )}
+                    </div>
+                </div>
+            </div>
+        </form>
+    );
+}
+
+function SignUpButton() {
+    const { pending } = useFormStatus();
 
     return (
-        <div className="relative h-screen">
-            <img
-                src="https://img.freepik.com/free-photo/top-view-career-guidance-items-judges_23-2149443471.jpg?t=st=1727200732~exp=1727204332~hmac=62e2a4be2caf3af4613a54ec95eb8e24a7130f772b95834527f49e24ba5f14bd&w=740"
-                alt=""
-                className="absolute hover:blur-none blur-sm inset-0 w-full h-full object-cover"
-            />
-            <div className="bg-white hover:blur-none blur-sm rounded-3xl w-1/2 h-3/5 bg-opacity-95 absolute z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col justify-center items-center px-24">
-                <motion.div
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                    className="absolute top-8 left-8 cursor-pointer"
-                    onClick={() => router.back()}
-                >
-                    <FaArrowLeft size={36} />
-                </motion.div>
-                <motion.div
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                    className="absolute top-8 right-8 cursor-pointer"
-                    onClick={() => router.push("/")}
-                >
-                    <FaHome size={36} />
-                </motion.div>
-                <h2 className="text-5xl font-bold mb-12">Register</h2>
-                <motion.input
-                    whileFocus={{ scale: 1.05, backgroundColor: "#f0f0f0" }}
-                    type="text"
-                    placeholder="Username"
-                    className="bg-secondary rounded-md px-4 py-2 mb-4 w-full"
-                />
-                <motion.input
-                    whileFocus={{ scale: 1.05, backgroundColor: "#f0f0f0" }}
-                    type="email"
-                    placeholder="Email"
-                    className="bg-secondary rounded-md px-4 py-2 mb-4 w-full"
-                />
-                <motion.input
-                    whileFocus={{ scale: 1.05, backgroundColor: "#f0f0f0" }}
-                    type="password"
-                    placeholder="Password"
-                    className="bg-secondary rounded-md px-4 py-2 mb-4 w-full"
-                />
-                <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.9 }}
-                    className="bg-primary hover:bg-black text-white font-bold py-2 px-4 rounded-md w-full"
-                >
-                    Register
-                </motion.button>
-                <h1 className="mt-5 font-bold text-xl">
-                    Already have an account? Click{" "}
-                    <span
-                        className="underline text-blue-500 cursor-pointer"
-                        onClick={() => router.push("/api/auth/login")}
-                    >
-                        here
-                    </span>
-                </h1>
-            </div>
-        </div>
+        <Button className="mt-4 w-full" aria-disabled={pending}>
+            Create account
+        </Button>
     );
 }
