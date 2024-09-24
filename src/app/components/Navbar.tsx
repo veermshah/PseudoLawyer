@@ -55,7 +55,7 @@ export default function Navbar() {
                 className="hover:bg-white rounded-3xl pr-2"
                 style={{ cursor: "pointer" }}
                 onClick={() => {
-                    router.push("/auth/login");
+                    router.push("/api/auth/login");
                 }}
             >
                 <IoLogIn size={"4rem"} />
