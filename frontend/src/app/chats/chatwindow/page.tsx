@@ -4,25 +4,32 @@ import Talk from "talkjs";
 import { Session, Chatbox } from "@talkjs/react";
 import { FaArrowLeft, FaHome } from "react-icons/fa";
 import { motion } from "framer-motion";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import useAuthUser from "../../hooks/use-auth-user";
 
 function Chat() {
     const router = useRouter();
+    const user = useAuthUser();
+    const searchParams = useSearchParams();
+
+    const otherPersonName = searchParams.get("name"); // Get 'name' parameter
+    const otherPersonEmail = searchParams.get("email"); // Get 'email' parameter
+
     const syncUser = useCallback(
         () =>
             new Talk.User({
-                id: "otherPerson",
-                name: "Other Person",
-                email: "otherPerson@example.com",
-                photoUrl: "https://talkjs.com/new-web/avatar-2.jpg",
-                welcomeMessage: "Hey, how can I help?",
+                id: String(user?.name),
+                name: String(user?.name),
+                email: String(user?.email),
+                photoUrl: "https://talkjs.com/new-web/avatar-7.jpg",
+                welcomeMessage: `Hi, I'm ${user?.name}!`,
             }),
         []
     );
 
     const syncConversation = useCallback((session: any) => {
         // JavaScript SDK code here
-        const conversation = session.getOrCreateConversation("new_group_chat1");
+        const conversation = session.getOrCreateConversation(`talkjs-chat-${otherPersonEmail}`);
 
         const Sudo = new Talk.User({
             id: "sudo",
@@ -33,11 +40,11 @@ function Chat() {
         });
 
         const otherPerson = new Talk.User({
-            id: "veer",
-            name: "Veer",
-            email: "veermickey@gmail.com",
-            photoUrl: "https://talkjs.com/new-web/avatar-7.jpg",
-            welcomeMessage: "Hi, I'm Veer!",
+            id: `${otherPersonName}`,
+            name: `${otherPersonName}`,
+            email: `${otherPersonEmail}`,
+            photoUrl: "https://talkjs.com/new-web/avatar-2.jpg",
+            welcomeMessage: "Hey, how can I help?",
         });
 
         conversation.setParticipant(session.me);
