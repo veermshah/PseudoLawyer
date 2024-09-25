@@ -1,133 +1,46 @@
-"use client";
-import { useCallback } from "react";
-import Talk from "talkjs";
-import { Session, Chatbox } from "@talkjs/react";
-import { FaArrowLeft, FaHome } from "react-icons/fa";
-import { motion } from "framer-motion";
-import { useRouter } from "next/navigation";
+import React, { useState } from "react";
+import { sendMessageToAI } from "../api/chatApi/chatApi";
 
-function Chat() {
-    const router = useRouter();
-    const syncUser = useCallback(
-        () =>
-            new Talk.User({
-                id: "otherPerson",
-                name: "Other Person",
-                email: "otherPerson@example.com",
-                photoUrl: "https://talkjs.com/new-web/avatar-2.jpg",
-                welcomeMessage: "Hey, how can I help?",
-            }),
-        []
-    );
+export default function ChatWindow() {
+    const [message, setMessage] = useState('');
+    const [chatHistory, setChatHistory] = useState<{ sender: string, message: string }[]>([]);
 
-    const syncConversation = useCallback((session: any) => {
-        // JavaScript SDK code here
-        const conversation = session.getOrCreateConversation("new_group_chat1");
+    const handleSendMessage = async () => {
+        if (!message.trim()) return;
 
-        const Sudo = new Talk.User({
-            id: "sudo",
-            name: "Sudo",
-            email: "sudo@example.com",
-            photoUrl: "https://talkjs.com/new-web/avatar-1.jpg",
-            welcomeMessage: "Hey, how can I help?",
-        });
+        // Add the user's message to the chat history
+        setChatHistory([...chatHistory, { sender: 'User', message }]);
 
-        const otherPerson = new Talk.User({
-            id: "veer",
-            name: "Veer",
-            email: "veermickey@gmail.com",
-            photoUrl: "https://talkjs.com/new-web/avatar-7.jpg",
-            welcomeMessage: "Hi, I'm Veer!",
-        });
+        // Send the message to the backend and get the AI response
+        try {
+            const aiResponse = await sendMessageToAI(message);
+            setChatHistory((prev) => [...prev, { sender: 'AI', message: aiResponse }]);
+        } catch (error) {
+            console.error("Error sending message:", error);
+        }
 
-        conversation.setParticipant(session.me);
-        conversation.setParticipant(Sudo);
-        conversation.setParticipant(otherPerson);
-
-        return conversation;
-    }, []);
+        // Clear the input field
+        setMessage('');
+    };
 
     return (
-        <Session appId="tFnmfonZ" syncUser={syncUser}>
-            <div className="flex">
-                <Chatbox
-                    syncConversation={syncConversation}
-                    className="w-1/2 h-screen"
-                ></Chatbox>
-                <div className=" flex flex-col w-1/2 mx-10 mt-10 h-[calc(100vh-40px)] overflow-y-auto">
-                    <div className="bg-white h-5/6 rounded-3xl p-6 overflow-y-auto">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                        Veniam voluptatem omnis voluptatum suscipit facere est,
-                        non aliquid sint adipisci autem facilis sequi inventore
-                        molestiae cupiditate commodi quis, esse doloribus error
-                        deleniti assumenda delectus tenetur! Magnam odit
-                        voluptatibus architecto ut, molestias ipsa! Iste, sunt
-                        aliquam! Iure ipsum facere iste ex quaerat commodi autem
-                        corrupti sint incidunt et iusto tempora aut a
-                        voluptates, cumque labore excepturi tenetur magnam modi!
-                        Non vitae nam, eius consequatur sit voluptas officiis
-                        iure facilis reiciendis quasi quo facere quas debitis
-                        totam, harum, pariatur quis necessitatibus quos vero
-                        enim cupiditate ducimus a error. Hic quos maiores
-                        expedita nobis! cidunt et iusto tempora aut a
-                        voluptates, cumque labore excepturi tenetur magnam modi!
-                        Non vitae nam, eius consequatur sit voluptas officiis
-                        iure facilis reiciendis quasi quo facere quas debitis
-                        totam, harum, pariatur quis necessitatibus quos vero
-                        enim cupiditate ducimus a error. Hic quos maiores
-                        expedita nobis! cidunt et iusto tempora aut a
-                        voluptates, cumque labore excepturi tenetur magnam modi!
-                        Non vitae nam, eius consequatur sit voluptas officiis
-                        iure facilis reiciendis quasi quo facere quas debitis
-                        totam, harum, pariatur quis necessitatibus quos vero
-                        enim cupiditate ducimus a error. Hic quos maiores
-                        expedita nobis! cidunt et iusto tempora aut a
-                        voluptates, cumque labore excepturi tenetur magnam modi!
-                        Non vitae nam, eius consequatur sit voluptas officiis
-                        iure facilis reiciendis quasi quo facere quas debitis
-                        totam, harum, pariatur quis necessitatibus quos vero
-                        enim cupiditate ducimus a error. Hic quos maiores
-                        expedita nobis! cidunt et iusto tempora aut a
-                        voluptates, cumque labore excepturi tenetur magnam modi!
-                        Non vitae nam, eius consequatur sit voluptas officiis
-                        iure facilis reiciendis quasi quo facere quas debitis
-                        totam, harum, pariatur quis necessitatibus quos vero
-                        enim cupiditate ducimus a error. Hic quos maiores
-                        expedita nobis!cidunt et iusto tempora aut a voluptates,
-                        cumque labore excepturi tenetur magnam modi! Non vitae
-                        nam, eius consequatur sit voluptas officiis iure facilis
-                        reiciendis quasi quo facere quas debitis totam, harum,
-                        pariatur quis necessitatibus quos vero enim cupiditate
-                        ducimus a error. Hic quos maiores expedita nobis!cidunt
-                        et iusto tempora aut a voluptates, cumque labore
-                        excepturi tenetur magnam modi! Non vitae nam, eius
-                        consequatur sit voluptas officiis iure facilis
-                        reiciendis quasi quo facere quas debitis totam, harum,
-                        pariatur quis necessitatibus quos vero enim cupiditate
-                        ducimus a error. Hic quos maiores expedita nobis!
+        <div className="chat-container">
+            <div className="chat-box">
+                {chatHistory.map((chat, index) => (
+                    <div key={index} className={`message ${chat.sender}`}>
+                        <strong>{chat.sender}: </strong>{chat.message}
                     </div>
-                    <div className="flex text-white justify-evenly mt-8">
-                        <motion.div
-                            whileHover={{ scale: 1.1 }}
-                            whileTap={{ scale: 0.9 }}
-                            onClick={() => router.back()}
-                            className="h-fit cursor-pointer"
-                        >
-                            <FaArrowLeft size={50} />
-                        </motion.div>
-                        <motion.div
-                            whileHover={{ scale: 1.1 }}
-                            whileTap={{ scale: 0.9 }}
-                            onClick={() => router.push("/")}
-                            className="h-fit cursor-pointer"
-                        >
-                            <FaHome size={50} />
-                        </motion.div>
-                    </div>
-                </div>
+                ))}
             </div>
-        </Session>
+
+            <input
+                type="text"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                placeholder="Type a message"
+                className="chat-input"
+            />
+            <button onClick={handleSendMessage} className="send-button">Send</button>
+        </div>
     );
 }
-
-export default Chat;

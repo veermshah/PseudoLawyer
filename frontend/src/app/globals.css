@@ -116,3 +116,19 @@
     font-weight: 900;
     font-style: italic;
 }
+
+.message.User {
+    color: white;
+    background-color: #007bff;
+    padding: 8px;
+    margin: 5px 0;
+    border-radius: 5px;
+}
+
+.message.AI {
+    color: white;
+    background-color: #28a745;
+    padding: 8px;
+    margin: 5px 0;
+    border-radius: 5px;
+}
