@@ -1,6 +1,14 @@
+// src/components/ChatRow.tsx
 import React from "react";
 
-export default function ChatRow(props: any) {
+interface ChatRowProps {
+    number: number;
+    name: string;
+    lastMessage: string;
+    time: string;
+}
+
+export default function ChatRow(props: ChatRowProps) {
     return (
         <div>
             <hr className="bg-white border-2" />
