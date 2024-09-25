@@ -43,29 +43,28 @@ export default function LoginForm() {
                             backgroundColor: "#f0f0f0",
                             color: "#000000",
                         }}
-                        className="bg-secondary rounded-md px-4 py-2 w-full"
+                        className="bg-secondary rounded-md px-4 py-2 w-full mb-2"
                         id="email"
                         type="email"
                         name="email"
                         placeholder="Enter your email address"
                         required
                     />
-                    <div className="mt-4">
-                        <motion.input
-                            whileFocus={{
-                                scale: 1.05,
-                                backgroundColor: "#f0f0f0",
-                                color: "#000000",
-                            }}
-                            className="bg-secondary rounded-md px-4 py-2 mb-4 w-full"
-                            id="password"
-                            type="password"
-                            name="password"
-                            placeholder="Enter password"
-                            required
-                            minLength={6}
-                        />
-                    </div>
+                    <motion.input
+                        whileFocus={{
+                            scale: 1.05,
+                            backgroundColor: "#f0f0f0",
+                            color: "#000000",
+                        }}
+                        className="bg-secondary rounded-md px-4 py-2 mb-2 w-full"
+                        id="password"
+                        type="password"
+                        name="password"
+                        placeholder="Enter password"
+                        required
+                        minLength={6}
+                    />
+
                     <LoginButton />
                     <div className="flex justify-center">
                         <Link

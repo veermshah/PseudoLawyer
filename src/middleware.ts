@@ -1,30 +1,32 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { authenticatedUser } from "./utils/amplify-server-utils";
-// for user authorization don't touchy - veer
+
 export async function middleware(request: NextRequest) {
     const response = NextResponse.next();
     const user = await authenticatedUser({ request, response });
 
+    const isOnDashboard = request.nextUrl.pathname.startsWith("/chats");
     const isOnContracts = request.nextUrl.pathname.startsWith("/contracts");
-    const isOnChats = request.nextUrl.pathname.startsWith("/chats");
 
-    // Redirect to login if accessing chats or contracts without being authenticated
-    if ((isOnChats || isOnContracts) && !user) {
-        return NextResponse.redirect(new URL("/api/auth/login", request.nextUrl));
-    }
+    // // Redirect unauthenticated users trying to access /contracts
+    // if ((isOnContracts && user === null) || user === undefined) {
+    //     return NextResponse.redirect(
+    //         new URL("/api/auth/login", request.nextUrl)
+    //     );
+    // }
 
-    // Optionally redirect authenticated users away from login page
-    if (request.nextUrl.pathname.startsWith("/api/auth/login") && user) {
-        return NextResponse.redirect(new URL("/", request.nextUrl));
-    }
+    // // Allow access to the root ("/") whether authenticated or not
+    // if (request.nextUrl.pathname === "/") {
+    //     return response; // Let the user access the root directory
+    // }
 
-    // Allow the request to proceed if no conditions were met for redirection
-    return NextResponse.next();
+    // Otherwise, allow access to any other public pages
+    return response;
 }
 
 export const config = {
     /*
      * Match all request paths except for the ones starting with
      */
-    matcher: ["/chats", "/contracts"],
+    matcher: ["/((?!api|_next/static|_next/image|.*\\.png$).*)"],
 };

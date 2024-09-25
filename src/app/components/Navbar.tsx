@@ -32,7 +32,9 @@ export default function Navbar() {
                     whileTap={{ scale: 0.9 }}
                     style={{ cursor: "pointer" }}
                     onClick={() => {
-                        router.push("/chats");
+                        user
+                            ? router.push("/chats")
+                            : router.push("/api/auth/login");
                     }}
                 >
                     <h1 className="rounded-3xl hover:bg-white hover:text-black px-3 py-2">
@@ -45,7 +47,9 @@ export default function Navbar() {
                     whileTap={{ scale: 0.9 }}
                     style={{ cursor: "pointer" }}
                     onClick={() => {
-                        router.push("/contracts");
+                        user
+                            ? router.push("/contracts")
+                            : router.push("/api/auth/login");
                     }}
                 >
                     <h1 className="rounded-3xl hover:bg-white hover:text-black px-3 py-2">

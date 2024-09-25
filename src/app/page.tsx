@@ -36,12 +36,13 @@ export default function Home() {
                     transition={{ duration: 0.6 }} // Duration in seconds
                     whileTap={{ scale: 0.9 }}
                     onClick={() => {
-                        router.push("/register");
+                        router.push("/api/auth/register");
                     }}
                     className="text-4xl mt-16 barlow-black mx-auto hover:bg-white hover:text-secondary px-4 py-1 rounded-full w-fit cursor-pointer"
                 >
                     CLICK TO GET STARTED
                 </motion.div>
+                <div className="h-48"></div>
             </div>
         </>
     );

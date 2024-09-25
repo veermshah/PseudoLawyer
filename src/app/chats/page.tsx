@@ -1,26 +1,39 @@
 import React from "react";
 import Navbar from "../components/Navbar";
+import ChatRow from "../components/ChatRow";
+
 export default function Chats() {
     return (
         <div>
             <Navbar />
             <div className="mt-10 text-white text-3xl barlow-bold ">
-                <hr className="bg-white border-2" />
-                <div className="flex items-center gap-8 my-3 mx-16">
-                    <h1>Chat 1</h1>
-                    <h1>Chris turk</h1>
+                <div>
+                    <div className="grid grid-cols-4 gap-8 my-3 mx-16 items-center barlow-black">
+                        <h1 className="text-left">Chat Number</h1>
+                        <h1 className="text-left">Person</h1>
+                        <h1 className="text-left">Last Message</h1>
+                        <h1 className="text-right">Time Updated</h1>
+                    </div>
                 </div>
-                <hr className="bg-white border-1" />
-                <div className="flex items-center gap-8 my-3 mx-16">
-                    <h1>Chat 1</h1>
-                    <h1>Chris turk</h1>
-                </div>
-                <hr className="bg-white border-1" />
-                <div className="flex items-center gap-8 my-3 mx-16">
-                    <h1>Chat 1</h1>
-                    <h1>Chris turk</h1>
-                </div>
-                <hr className="bg-white border-2" />
+                <hr className="border-2 border-white"/>
+                <ChatRow
+                    number={1}
+                    name={"Turk"}
+                    lastMessage={"HI"}
+                    time={"September"}
+                />
+                <ChatRow
+                    number={1}
+                    name={"Turk"}
+                    lastMessage={"HI"}
+                    time={"September"}
+                />
+                <ChatRow
+                    number={1}
+                    name={"Turk"}
+                    lastMessage={"HI"}
+                    time={"September"}
+                />
             </div>
         </div>
     );

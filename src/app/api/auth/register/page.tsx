@@ -36,7 +36,7 @@ export default function SignUpForm() {
                 >
                     <FaHome size={36} />
                 </motion.div>
-                <h2 className="text-5xl font-bold mb-12">Login</h2>
+                <h2 className="text-5xl font-bold mb-12">Register</h2>
                 <form action={dispatch} className="barlow-semibold text-white">
                     <motion.input
                         whileFocus={{
