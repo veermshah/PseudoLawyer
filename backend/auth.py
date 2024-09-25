@@ -1,19 +1,23 @@
 # auth.py
-
-from flask import request
+from flask import request, jsonify
 import boto3
+import os
+from dotenv import load_dotenv
 
-cognito_client = boto3.client('cognito-idp')
+# Load environment variables
+load_dotenv()
+
+cognito = boto3.client('cognito-idp', region_name=os.getenv('AWS_DEFAULT_REGION'))
 
 def login():
-    data = request.get_json()
-    response = cognito_client.admin_initiate_auth(
-        UserPoolId='env.AWS_COGNITO_USER_POOL_ID',
-        ClientId='env.AWS_COGNITO_APP_CLIENT_ID',
+    data = request.json
+    response = cognito.admin_initiate_auth(
+        UserPoolId=os.getenv('COGNITO_USER_POOL_ID'),
+        ClientId=os.getenv('COGNITO_CLIENT_ID'),
         AuthFlow='ADMIN_NO_SRP_AUTH',
         AuthParameters={
             'USERNAME': data['username'],
             'PASSWORD': data['password']
         }
     )
-    return response
+    return jsonify(response)
