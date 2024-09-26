@@ -6,6 +6,7 @@ import ChatRow from "../components/ChatRow";
 import { Tilt } from "react-tilt";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { useRouter } from "next/navigation";
+import useAuthUser from "../hooks/use-auth-user";
 
 export default function Chats() {
     const router = useRouter();
@@ -22,6 +23,8 @@ export default function Chats() {
         easing: "cubic-bezier(.03,.98,.52,.99)", // Easing on enter/exit.
     };
 
+    
+
     return (
         <div>
             <Navbar />
@@ -37,7 +40,7 @@ export default function Chats() {
                 </Tilt>
             </div>
 
-            <div className="mt-10 text-white text-3xl barlow-bold ">
+            <div className="mt-10 text-white text-2xl barlow-bold ">
                 <div>
                     <div className="grid grid-cols-4 gap-8 my-3 mx-16 items-center barlow-black">
                         <h1 className="text-left">Chat Number</h1>
@@ -49,19 +52,7 @@ export default function Chats() {
                 <hr className="border-2 border-white" />
                 <ChatRow
                     number={1}
-                    name={"Turk"}
-                    lastMessage={"HI"}
-                    time={"September"}
-                />
-                <ChatRow
-                    number={1}
-                    name={"Turk"}
-                    lastMessage={"HI"}
-                    time={"September"}
-                />
-                <ChatRow
-                    number={1}
-                    name={"Turk"}
+                    otherPersonEmail={"jeremiahboban@gmail.com"}
                     lastMessage={"HI"}
                     time={"September"}
                 />

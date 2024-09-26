@@ -7,16 +7,24 @@ import { useRouter } from "next/navigation";
 
 export default function Profile() {
     const router = useRouter();
-    const [name, setName] = useState("");
-    const [email, setEmail] = useState("");
+    const user = useAuthUser();
+    const [otherPersonName, setOtherPersonName] = useState("");
+    const [otherPersonEmail, setOtherPersonEmail] = useState("");
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        console.log("create chat page");
+        console.log("Creating chat with", otherPersonName, otherPersonEmail);
+        console.log("Your name is", user?.name, "and your email is", user?.email);
         // Navigate to the chat window with the name and email as query params
         router.push(
-            `/chats/chatwindow?name=${encodeURIComponent(
-                name
-            )}&email=${encodeURIComponent(email)}`
+            `/chats/chatwindow?otherPersonName=${encodeURIComponent(
+                otherPersonName
+            )}&otherPersonEmail=${encodeURIComponent(
+                otherPersonEmail
+            )}&yourname=${encodeURIComponent(
+                user?.name
+            )}&youremail=${encodeURIComponent(user?.email)}`
         );
     };
 
@@ -55,8 +63,8 @@ export default function Profile() {
                         placeholder="Enter their full name"
                         required
                         className="rounded-3xl px-4 py-2 w-full bg-white text-secondary barlow-semibold text-2xl"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)} // Capture input value
+                        value={otherPersonName}
+                        onChange={(e) => setOtherPersonName(e.target.value)} // Capture input value
                     />
                     <h1 className="text-2xl text-white barlow-bold mt-6 mb-3">
                         WHAT IS THEIR EMAIL?
@@ -69,8 +77,8 @@ export default function Profile() {
                         placeholder="Enter their email address"
                         required
                         className="rounded-3xl px-4 py-2 w-full bg-white text-secondary barlow-semibold text-2xl"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)} // Capture input value
+                        value={otherPersonEmail}
+                        onChange={(e) => setOtherPersonEmail(e.target.value)} // Capture input value
                     />
                     <motion.button
                         type="submit" // Ensure the button is a submit button
